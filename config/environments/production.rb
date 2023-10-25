@@ -66,7 +66,7 @@ Rails.application.configure do
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   config.action_mailer.raise_delivery_errors = false
 
-  if ENV['EMAIL_SMTP_HOST'].present?
+  if ENV['EMAIL_DELIVERY_METHOD'] == "smtp"
     config.action_mailer.delivery_method = :smtp
     config.action_mailer.smtp_settings = {
       address:              ENV['EMAIL_SMTP_HOST'],
@@ -79,6 +79,9 @@ Rails.application.configure do
       openssl_verify_mode:  ENV["EMAIL_SMTP_OPENSSL_VERIFY_MODE"],
       tls:                  ENV["EMAIL_SMTP_TLS"]
     }
+  end
+
+  if ENV['EMAIL_CONFIRMATION']
     config.action_mailer.default_options = {
       from: ENV.fetch("EMAIL_MAIL_FROM"),
       reply_to: ENV.fetch("EMAIL_MAIL_REPLY_TO", ENV.fetch("EMAIL_MAIL_FROM"))
